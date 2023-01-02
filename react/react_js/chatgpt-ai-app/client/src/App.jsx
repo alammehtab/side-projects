@@ -1,13 +1,16 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <h1>Welcome to ChatGPT by OpenAi</h1>
+    <div className="app">
+      <div className="chat_container"></div>
+      <form>
+        <textarea
+          name="prompt"
+          rows={1}
+          cols={1}
+          placeholder="Ask me..."
+        ></textarea>
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
 }
