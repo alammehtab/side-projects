@@ -25,7 +25,8 @@ public class StudentServiceImp implements StudentService{
     @Override
     public String updateStudent(Integer id){
         boolean exists = studentRepository.existsById(id);
-        return "Student updated successfully."+id;
+        if(!exists) return "Student with id "+id+" doesn't exist.";
+        return "Student with id "+id+" updated successfully.";
     }
 
     @Override
