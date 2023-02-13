@@ -9,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
@@ -30,6 +31,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Integer userId){
         UserDto updatedUser = this.userService.updateUser(userDto,userId);
 
+        // can use this too:  new ResponseEntity<>()
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -38,11 +40,14 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId){
          this.userService.deleteUserById(userId);
 
+         // can also do this instead of the following:
+        //  return  new ResponseEntity(Map.of("message","User deleted successfully."),HttpStatus.ok);
+
          return new ResponseEntity(new ApiResponse("User deleted successfully.",true),HttpStatus.OK);
     }
 
     // get all users
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
