@@ -22,13 +22,17 @@ public class Post {
     @Column(length = 10000)
     private String content;
 
+    @Column(name = "imageName")
     private String imageName;
 
+    @Column(name = "createdAt")
     private Date createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne()
+    @JoinColumn(name = "categoryId")
     private Category category;
 }
