@@ -1,9 +1,8 @@
 package com.alam.blogappbackend.controllers;
 
+import com.alam.blogappbackend.dtos.ApiResponse;
 import com.alam.blogappbackend.dtos.PostDto;
-import com.alam.blogappbackend.models.Post;
 import com.alam.blogappbackend.services.PostService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,14 @@ public class PostController {
         PostDto createdPostDto = postService.createPost(postDto,userId,categoryId);
 
         return new ResponseEntity<PostDto>(createdPostDto, HttpStatus.CREATED);
+    }
+
+    //update post
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
+        PostDto updatedPostDto = postService.updatePost(postDto,postId);
+
+        return new ResponseEntity<PostDto>(updatedPostDto,HttpStatus.OK);
     }
 
     // get posts by user
@@ -56,6 +63,14 @@ public class PostController {
         List<PostDto> postDtos = postService.getAllPosts();
 
         return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/post/{postId}")
+    public ApiResponse deletePost(@PathVariable Integer postId){
+        postService.deletePost(postId);
+
+        return new ApiResponse("Post deleted successfully.",true);
     }
 
 }
