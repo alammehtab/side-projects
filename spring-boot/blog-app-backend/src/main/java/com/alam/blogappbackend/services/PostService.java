@@ -20,7 +20,7 @@ public interface PostService {
     void deletePost(Integer postId);
 
     //read all
-    List<PostDto> getAllPosts();
+    List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize);
 
     //read all by category
     List<PostDto> getPostsByCategory(Integer categoryId);
