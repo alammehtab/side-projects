@@ -11,7 +11,7 @@ public interface PostService {
     PostDto createPost(PostDto postDto, Integer userId, Integer categoryId);
 
     //read
-    Post getPostById(Integer postId);
+    PostDto getPostById(Integer postId);
 
     //update
     Post updatePost(PostDto postDto, Integer postId);
@@ -20,7 +20,7 @@ public interface PostService {
     void deletePost(Integer postId);
 
     //read all
-    List<Post> getAllPosts();
+    List<PostDto> getAllPosts();
 
     //read all by category
     List<PostDto> getPostsByCategory(Integer categoryId);
