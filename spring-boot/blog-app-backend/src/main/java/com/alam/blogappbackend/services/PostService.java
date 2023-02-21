@@ -1,6 +1,7 @@
 package com.alam.blogappbackend.services;
 
 import com.alam.blogappbackend.dtos.PostDto;
+import com.alam.blogappbackend.dtos.PostResponse;
 import com.alam.blogappbackend.models.Post;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface PostService {
     void deletePost(Integer postId);
 
     //read all
-    List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     //read all by category
     List<PostDto> getPostsByCategory(Integer categoryId);

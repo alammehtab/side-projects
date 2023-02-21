@@ -2,6 +2,7 @@ package com.alam.blogappbackend.controllers;
 
 import com.alam.blogappbackend.dtos.ApiResponse;
 import com.alam.blogappbackend.dtos.PostDto;
+import com.alam.blogappbackend.dtos.PostResponse;
 import com.alam.blogappbackend.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,11 +60,11 @@ public class PostController {
 
     // get all posts
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-                                                     @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize){
-        List<PostDto> postDtos = postService.getAllPosts(pageNumber,pageSize);
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+                                    @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
+        PostResponse postResponse = postService.getAllPosts(pageNumber,pageSize);
 
-        return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+        return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
     }
 
 

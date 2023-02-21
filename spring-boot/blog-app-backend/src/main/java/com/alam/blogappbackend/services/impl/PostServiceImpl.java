@@ -1,6 +1,7 @@
 package com.alam.blogappbackend.services.impl;
 
 import com.alam.blogappbackend.dtos.PostDto;
+import com.alam.blogappbackend.dtos.PostResponse;
 import com.alam.blogappbackend.dtos.UserDto;
 import com.alam.blogappbackend.exceptions.ResourceNotFoundException;
 import com.alam.blogappbackend.models.Category;
@@ -78,7 +79,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
         //a pageable instance
         Pageable p = PageRequest.of(pageNumber,pageSize);
 
@@ -90,7 +91,16 @@ public class PostServiceImpl implements PostService {
 
         List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
 
-        return postDtos;
+        PostResponse postResponse = new PostResponse();
+
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(postsPage.getNumber());
+        postResponse.setPageSize(postsPage.getSize());
+        postResponse.setTotalElements(postsPage.getTotalElements());
+        postResponse.setTotalPages(postsPage.getTotalPages());
+        postResponse.setIsLastPage(postsPage.isLast());
+
+        return postResponse;
     }
 
     @Override
