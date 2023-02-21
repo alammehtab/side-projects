@@ -36,16 +36,18 @@ public class PostController {
 
     // get posts by user
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId){
-        List<PostDto> postDtos = postService.getPostsByUser(userId);
+    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId,@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+                                                        @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
+        List<PostDto> postDtos = postService.getPostsByUser(userId,pageNumber,pageSize);
 
         return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
     }
 
     // get posts by category
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId){
-        List<PostDto> postDtos = postService.getPostsByCategory(categoryId);
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId,@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+                                                            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
+        List<PostDto> postDtos = postService.getPostsByCategory(categoryId,pageNumber,pageSize);
 
         return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
     }

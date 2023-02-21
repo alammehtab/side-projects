@@ -2,7 +2,6 @@ package com.alam.blogappbackend.services.impl;
 
 import com.alam.blogappbackend.dtos.PostDto;
 import com.alam.blogappbackend.dtos.PostResponse;
-import com.alam.blogappbackend.dtos.UserDto;
 import com.alam.blogappbackend.exceptions.ResourceNotFoundException;
 import com.alam.blogappbackend.models.Category;
 import com.alam.blogappbackend.models.Post;
@@ -104,18 +103,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostsByCategory(Integer categoryId) {
+    public List<PostDto> getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize) {
         Category category = categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","category Id",categoryId));
-        List<Post> posts = postRepo.findByCategory(category);
+        Pageable p = PageRequest.of(pageNumber,pageSize);
+
+        Page<Post> postsPage = postRepo.findByCategory(category,p);
+        List<Post> posts = postsPage.getContent();
+
         List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
 
         return postDtos;
     }
 
     @Override
-    public List<PostDto> getPostsByUser(Integer userId) {
+    public List<PostDto> getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize) {
         User user = userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","user Id",userId));
-        List<Post> posts = postRepo.findByUser(user);
+        Pageable p = PageRequest.of(pageNumber,pageSize);
+        Page<Post> postsPage = postRepo.findByUser(user,p);
+
+        // getting posts using pageable
+        List<Post> posts = postsPage.getContent();
+
         List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
 
         return postDtos;
