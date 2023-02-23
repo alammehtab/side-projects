@@ -64,7 +64,7 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
                                                     @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-                                                    @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                    @RequestParam(value = "sortBy", defaultValue = "Id", required = false) String sortBy,
                                                     @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
         PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize,sortBy,sortOrder);
 
@@ -77,6 +77,13 @@ public class PostController {
         postService.deletePost(postId);
 
         return new ApiResponse("Post deleted successfully.", true);
+    }
+
+    @GetMapping("/posts/search/{keyword}")
+    public ResponseEntity<List<PostDto>> searchPost(@PathVariable("keyword") String keyword){
+         List<PostDto> postDtos = postService.searchPosts(keyword);
+
+         return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
     }
 
 }
