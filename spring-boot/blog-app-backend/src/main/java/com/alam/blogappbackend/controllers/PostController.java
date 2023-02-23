@@ -20,61 +20,63 @@ public class PostController {
 
     //create
     @PostMapping("/user/{userId}/category/{categoryId}")
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId){
-        PostDto createdPostDto = postService.createPost(postDto,userId,categoryId);
+    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
+        PostDto createdPostDto = postService.createPost(postDto, userId, categoryId);
 
         return new ResponseEntity<PostDto>(createdPostDto, HttpStatus.CREATED);
     }
 
     //update post
     @PutMapping("/post/{postId}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
-        PostDto updatedPostDto = postService.updatePost(postDto,postId);
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId) {
+        PostDto updatedPostDto = postService.updatePost(postDto, postId);
 
-        return new ResponseEntity<PostDto>(updatedPostDto,HttpStatus.OK);
+        return new ResponseEntity<PostDto>(updatedPostDto, HttpStatus.OK);
     }
 
     // get posts by user
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId,@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-                                                        @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
-        List<PostDto> postDtos = postService.getPostsByUser(userId,pageNumber,pageSize);
+    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId, @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        List<PostDto> postDtos = postService.getPostsByUser(userId, pageNumber, pageSize);
 
-        return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
     }
 
     // get posts by category
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId,@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-                                                            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
-        List<PostDto> postDtos = postService.getPostsByCategory(categoryId,pageNumber,pageSize);
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId, @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        List<PostDto> postDtos = postService.getPostsByCategory(categoryId, pageNumber, pageSize);
 
-        return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
     }
 
     //get single post
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId){
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
         PostDto postDto = postService.getPostById(postId);
 
-        return new ResponseEntity<PostDto>(postDto,HttpStatus.OK);
+        return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
     }
 
     // get all posts
     @GetMapping("/posts")
-    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-                                    @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
-        PostResponse postResponse = postService.getAllPosts(pageNumber,pageSize);
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                                                    @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                    @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+        PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize,sortBy,sortOrder);
 
-        return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/post/{postId}")
-    public ApiResponse deletePost(@PathVariable Integer postId){
+    public ApiResponse deletePost(@PathVariable Integer postId) {
         postService.deletePost(postId);
 
-        return new ApiResponse("Post deleted successfully.",true);
+        return new ApiResponse("Post deleted successfully.", true);
     }
 
 }
