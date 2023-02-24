@@ -1,5 +1,6 @@
 package com.alam.blogappbackend.controllers;
 
+import com.alam.blogappbackend.config.AppConstants;
 import com.alam.blogappbackend.dtos.ApiResponse;
 import com.alam.blogappbackend.dtos.PostDto;
 import com.alam.blogappbackend.dtos.PostResponse;
@@ -62,10 +63,10 @@ public class PostController {
 
     // get all posts
     @GetMapping("/posts")
-    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-                                                    @RequestParam(value = "sortBy", defaultValue = "Id", required = false) String sortBy,
-                                                    @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                    @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                    @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+                                                    @RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder) {
         PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize,sortBy,sortOrder);
 
         return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);

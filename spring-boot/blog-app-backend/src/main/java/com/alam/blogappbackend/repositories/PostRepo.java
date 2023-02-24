@@ -1,6 +1,5 @@
 package com.alam.blogappbackend.repositories;
 
-import com.alam.blogappbackend.dtos.PostDto;
 import com.alam.blogappbackend.models.Category;
 import com.alam.blogappbackend.models.Post;
 import com.alam.blogappbackend.models.User;
