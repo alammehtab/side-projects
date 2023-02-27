@@ -4,12 +4,16 @@ import com.alam.blogappbackend.config.AppConstants;
 import com.alam.blogappbackend.dtos.ApiResponse;
 import com.alam.blogappbackend.dtos.PostDto;
 import com.alam.blogappbackend.dtos.PostResponse;
+import com.alam.blogappbackend.services.FileService;
 import com.alam.blogappbackend.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,13 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private FileService fileService;
+
+    // path for image in uploadPostImage
+    @Value("${project.image}")
+    private String path;
 
     //create
     @PostMapping("/user/{userId}/category/{categoryId}")
@@ -85,6 +96,16 @@ public class PostController {
          List<PostDto> postDtos = postService.searchPosts(keyword);
 
          return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+    }
+
+    // post image upload
+    @PostMapping("/post/image/upload/{postId}")
+    public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image")MultipartFile image, @PathVariable Integer postId) throws IOException {
+        PostDto postDto = postService.getPostById(postId);
+        String fileName = fileService.uploadImage(path,image);
+        postDto.setImageName(fileName);
+        PostDto updatedPostDto = postService.updatePost(postDto,postId);
+        return new ResponseEntity<PostDto>(updatedPostDto,HttpStatus.OK);
     }
 
 }

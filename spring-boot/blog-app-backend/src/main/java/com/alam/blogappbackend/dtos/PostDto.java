@@ -8,9 +8,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class PostDto {
     private Integer Id;
     private String title;
