@@ -1,12 +1,12 @@
 package com.alam.blogappbackend.dtos;
 
-import com.alam.blogappbackend.models.Category;
-import com.alam.blogappbackend.models.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -19,4 +19,5 @@ public class PostDto {
     private Date createdAt;
     private UserDto user;
     private CategoryDto category;
+    private Set<CommentDto> comments = new HashSet<>();
 }
