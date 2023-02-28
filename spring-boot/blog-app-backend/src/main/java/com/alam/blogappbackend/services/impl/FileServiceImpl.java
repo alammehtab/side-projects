@@ -22,7 +22,7 @@ public class FileServiceImpl implements FileService {
         String randomFileName = randomId.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
 
         // create file path
-        String filePath = path + File.separator + randomFileName;
+        String fullPath = path + File.separator + randomFileName;
 
         // create folder if not already
         File f = new File(path);
@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService {
         }
 
         // copy file
-        Files.copy(file.getInputStream(), Paths.get(filePath));
+        Files.copy(file.getInputStream(), Paths.get(fullPath));
 
         return randomFileName;
     }
