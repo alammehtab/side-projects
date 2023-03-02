@@ -1,24 +1,16 @@
 const express = require("express");
+const {
+  getGoals,
+  setGoal,
+  updateGoal,
+  deleteGoal,
+} = require("../controllers/goalsController");
 const router = express.Router();
 
-// get all goals
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "Get goals" });
-});
+// get goals and set goal handled both, could do it seperately, it reduced the lines of code
+router.route("/").get(getGoals).post(setGoal);
 
-// set a goal
-router.post("/", (req, res) => {
-  res.status(200).json({ message: "Set goal" });
-});
-
-// update a goal
-router.put("/:id", (req, res) => {
-  res.status(200).json({ message: `Update goal ${req.params.id}` });
-});
-
-// delete a goal
-router.delete("/:id", (req, res) => {
-  res.status(200).json({ message: `Update goal ${req.params.id}` });
-});
+// update and delete goal
+router.route("/:id").put(updateGoal).delete(deleteGoal);
 
 module.exports = router;
