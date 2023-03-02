@@ -1,0 +1,21 @@
+{
+  "name": "my-diary",
+  "version": "1.0.0",
+  "description": "a mern stack app for managing my diary",
+  "main": "server.js",
+  "scripts": {
+    "start":"node backend/server.js",
+    "dev":"nodemon backend/server.js"
+  },
+  "author": "Mehtab Alam",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
