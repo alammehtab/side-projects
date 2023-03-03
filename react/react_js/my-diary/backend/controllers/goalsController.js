@@ -1,12 +1,13 @@
 // could use try-catch to handle the async errors
 const asyncHandler = require("express-async-handler");
 const Goal = require("../models/goalModel");
+const User = require("../models/userModel");
 
 // @desc    Get goals
 // @route   GET /api/v1/goals
 // @access  Private
 const getGoals = asyncHandler(async (req, res) => {
-  const goals = await Goal.find();
+  const goals = await Goal.find({ user: req.user.id });
   res.status(200).json(goals);
 });
 
@@ -23,7 +24,7 @@ const setGoal = asyncHandler(async (req, res) => {
     // we've added errorMiddleware to change the content-type from html to json
     throw new Error("Please add goal title.");
   }
-  const goal = await Goal.create({ title: req.body.title });
+  const goal = await Goal.create({ title: req.body.title, user: req.user.id });
   res.status(200).json(goal);
 });
 
@@ -36,6 +37,23 @@ const updateGoal = asyncHandler(async (req, res) => {
   if (!goal) {
     res.status(400);
     throw Error(`Goal with id ${req?.params?.id} not found.`);
+  }
+
+  // get currently loggedIn user, loggedIn
+  const user = await User.findById(req.user.id);
+
+  // if not logged in so can't perform any action
+  // this happens when someone directly tries to do something without loggin in
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // make sure the loggin user is creator of the goal
+  // goal.user is the userId attached to the goal
+  if (goal.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
   }
 
   // update goal, create if not existed
@@ -57,7 +75,24 @@ const deleteGoal = asyncHandler(async (req, res) => {
     throw Error(`Goal with id ${req?.params?.id} not found.`);
   }
 
-  res.status(200).json({ id: req?.params?.id });
+  // get currently loggedIn user, loggedIn
+  const user = await User.findById(req.user.id);
+
+  // if not logged in so can't perform any action
+  // this happens when someone directly tries to do something without loggin in
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // make sure the loggin user is creator of the goal
+  // goal.user is the userId attached to the goal
+  if (goal.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  res.status(200).json({ id: req.params.id });
 });
 
 module.exports = { getGoals, setGoal, updateGoal, deleteGoal };
