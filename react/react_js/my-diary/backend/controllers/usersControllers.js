@@ -74,8 +74,9 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // @desc    Get your profile
 // @route   GET /api/v1/users/me
-// @access  public
+// @access  private
 const getMe = asyncHandler(async (req, res) => {
+  // any route that has used protected middleware has access to req.user
   res.json({ message: "Get me" });
 });
 
