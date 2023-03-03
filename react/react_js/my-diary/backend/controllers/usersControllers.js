@@ -61,7 +61,7 @@ const loginUser = asyncHandler(async (req, res) => {
   // if email is there in db and password matches, means it's a registered user
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
-      _id: user.id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       token: generateJwt(user._id),
@@ -79,7 +79,7 @@ const getMe = asyncHandler(async (req, res) => {
   // any route that has used protected middleware has access to req.user
 
   // get user data
-  const { _id, name, email } = await User.findById(req.user.id);
+  const { _id, name, email } = await User.findById(req.user._id);
 
   res.status(200).json({
     id: _id,

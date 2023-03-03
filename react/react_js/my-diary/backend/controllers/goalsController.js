@@ -7,7 +7,7 @@ const User = require("../models/userModel");
 // @route   GET /api/v1/goals
 // @access  Private
 const getGoals = asyncHandler(async (req, res) => {
-  const goals = await Goal.find({ user: req.user.id });
+  const goals = await Goal.find({ user: req.user._id });
   res.status(200).json(goals);
 });
 
@@ -24,7 +24,7 @@ const setGoal = asyncHandler(async (req, res) => {
     // we've added errorMiddleware to change the content-type from html to json
     throw new Error("Please add goal title.");
   }
-  const goal = await Goal.create({ title: req.body.title, user: req.user.id });
+  const goal = await Goal.create({ title: req.body.title, user: req.user._id });
   res.status(200).json(goal);
 });
 
@@ -40,7 +40,7 @@ const updateGoal = asyncHandler(async (req, res) => {
   }
 
   // get currently loggedIn user, loggedIn
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user._id);
 
   // if not logged in so can't perform any action
   // this happens when someone directly tries to do something without loggin in
@@ -51,7 +51,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 
   // make sure the loggin user is creator of the goal
   // goal.user is the userId attached to the goal
-  if (goal.user.toString() !== user.id) {
+  if (goal.user.toString() !== user._id) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -68,7 +68,7 @@ const updateGoal = asyncHandler(async (req, res) => {
 // @route   DELETE /api/v1/goals/:id
 // @access  Private
 const deleteGoal = asyncHandler(async (req, res) => {
-  const goal = await Goal.findByIdAndDelete(req?.params?.id);
+  const goal = await Goal.findById(req?.params?.id);
 
   if (!goal) {
     res.status(400);
@@ -76,7 +76,7 @@ const deleteGoal = asyncHandler(async (req, res) => {
   }
 
   // get currently loggedIn user, loggedIn
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user._id);
 
   // if not logged in so can't perform any action
   // this happens when someone directly tries to do something without loggin in
@@ -91,6 +91,8 @@ const deleteGoal = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not authorized");
   }
+
+  await Goal.deleteOne({ _id: req?.params?.id });
 
   res.status(200).json({ id: req.params.id });
 });
