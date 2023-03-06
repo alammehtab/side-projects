@@ -20,10 +20,10 @@ const authSlice = createSlice({
     // this name reset could be anything
     // here is state is representing initialState in the first run
     reset: (state) => {
-      (state.isLoading = false),
-        (state.isSuccess = false),
-        (state.isError = false),
-        (state.message = "");
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
     },
   },
   // has to be this
