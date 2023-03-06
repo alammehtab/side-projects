@@ -76,16 +76,9 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/users/me
 // @access  private
 const getMe = asyncHandler(async (req, res) => {
-  // any route that has used protected middleware has access to req.user
+  // any route that has used protect middleware (authMiddleware) has access to req.user
 
-  // get user data
-  const { _id, name, email } = await User.findById(req.user._id);
-
-  res.status(200).json({
-    id: _id,
-    name,
-    email,
-  });
+  res.status(200).json(req.user);
 });
 
 // generate JWT
