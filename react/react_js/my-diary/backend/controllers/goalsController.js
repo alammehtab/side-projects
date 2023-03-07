@@ -15,7 +15,7 @@ const getGoals = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/goals
 // @access  Private
 const setGoal = asyncHandler(async (req, res) => {
-  if (!req?.body?.title) {
+  if (!req.body.text) {
     // we could send the error ourselves (like follows) but express has built-in error handler
     // res.status(400).json({ message: "Please add goal title." });
     res.status(400);
@@ -24,7 +24,7 @@ const setGoal = asyncHandler(async (req, res) => {
     // we've added errorMiddleware to change the content-type from html to json
     throw new Error("Please add goal title.");
   }
-  const goal = await Goal.create({ title: req.body.title, user: req.user._id });
+  const goal = await Goal.create({ title: req.body.text, user: req.user._id });
   res.status(200).json(goal);
 });
 
