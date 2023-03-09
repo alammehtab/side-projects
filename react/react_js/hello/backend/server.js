@@ -1,9 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const chats = require("./data/chats");
+const connectDB = require("./config/db");
+const colors = require("colors");
 
 const app = express();
 dotenv.config();
+connectDB();
 
 const PORT = process.env.PORT;
 
