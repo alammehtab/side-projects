@@ -4,6 +4,7 @@ const chats = require("./data/chats");
 const connectDB = require("./config/db");
 const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
+const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
 app.use(express.json());
@@ -18,4 +19,7 @@ app.get("/api/v1/chats", (req, res) => {
 
 app.use("/api/v1/users", userRoutes);
 
+// middleware
+app.use(notFound);
+app.use(errorHandler);
 app.listen(PORT, console.log(`Server started on PORT ${PORT}.`));
