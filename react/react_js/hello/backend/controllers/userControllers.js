@@ -3,6 +3,25 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+//@description     Search user
+//@route           GET /api/v1/users?search=keyword
+//@access          Public
+const searchUser = asyncHandler(async (req, res) => {
+  // check for keywords in query
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  // now query the db
+  const users = await User.find(keyword);
+
+  res.json({ users });
+});
+
 //@description     Register new user
 //@route           POST /api/v1/users/register
 //@access          Public
@@ -80,4 +99,4 @@ const generateJwt = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { searchUser, registerUser, loginUser };
