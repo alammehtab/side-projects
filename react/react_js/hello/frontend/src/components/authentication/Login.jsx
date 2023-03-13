@@ -8,15 +8,17 @@ import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
+  // state
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
   const toast = useToast();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
+  // helper functions
+  const handleClick = () => setShow(!show);
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
@@ -40,7 +42,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "/api/user/login",
+        "/api/v1/users/login",
         { email, password },
         config
       );
