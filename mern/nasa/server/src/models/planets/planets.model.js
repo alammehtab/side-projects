@@ -4,8 +4,6 @@ const { parse } = require("csv-parse");
 
 const planets = require("./planets.mongo");
 
-const habitablePlanets = [];
-
 // planets don't have a model so that's y d service file is empty
 // and all functions are written here
 
@@ -28,32 +26,38 @@ function loadPlanetsData() {
       .pipe(parse({ comment: "#", columns: true }))
       .on("data", async (data) => {
         if (isHabitablePlanet(data)) {
-          await planets.create({
-            keplerName: data.kepler_name,
-          });
+          savePlanet(data);
         }
       })
       .on("error", (error) => {
         console.log(error);
         reject(error);
       })
-      .on("end", () => {
-        console.log(`${habitablePlanets.length} habitable planets found.`);
+      .on("end", async () => {
+        const countPlanetsFound = (await getAllPlanets()).length;
+        console.log(`${countPlanetsFound} habitable planets found.`);
         resolve();
       });
   });
 }
 
-const getAllPlanets = () =>
-  planets.find(
-    {
-      keplerName: "Kepler-62 f",
-      // the string represents the values we want to include in response/result
-      // add more fields by adding their names after a space like 'keplerName anotherField'
-      // to exclude a field put - infront of it like '-keplerName anotherField'
-      // we could also use {} by setting fieldNames to 0 (exclude) or 1 (include)
-    },
-    "keplerName"
-  );
+const getAllPlanets = async () => await planets.find({});
+const savePlanet = async (planet) => {
+  try {
+    await planets.updateOne(
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        upsert: true,
+      }
+    );
+  } catch (error) {
+    console.log(`Could not save planet ${error}`);
+  }
+};
 
 module.exports = { loadPlanetsData, getAllPlanets };
