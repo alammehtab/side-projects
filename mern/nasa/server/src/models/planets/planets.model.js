@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("csv-parse");
 
+const planets = require("./planets.mongo");
+
 const habitablePlanets = [];
 
 // planets don't have a model so that's y d service file is empty
@@ -24,9 +26,11 @@ function loadPlanetsData() {
       path.join(__dirname, "..", "..", "..", "data", "kepler_data.csv")
     )
       .pipe(parse({ comment: "#", columns: true }))
-      .on("data", (data) => {
+      .on("data", async (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanets.push(data);
+          await planets.create({
+            keplerName: data.kepler_name,
+          });
         }
       })
       .on("error", (error) => {
@@ -40,6 +44,16 @@ function loadPlanetsData() {
   });
 }
 
-const getAllPlanets = () => habitablePlanets;
+const getAllPlanets = () =>
+  planets.find(
+    {
+      keplerName: "Kepler-62 f",
+      // the string represents the values we want to include in response/result
+      // add more fields by adding their names after a space like 'keplerName anotherField'
+      // to exclude a field put - infront of it like '-keplerName anotherField'
+      // we could also use {} by setting fieldNames to 0 (exclude) or 1 (include)
+    },
+    "keplerName"
+  );
 
 module.exports = { loadPlanetsData, getAllPlanets };
