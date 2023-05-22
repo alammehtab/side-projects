@@ -41,7 +41,8 @@ function loadPlanetsData() {
   });
 }
 
-const getAllPlanets = async () => await planets.find({});
+// in the second bracket i'm exluding the irrelevent data
+const getAllPlanets = async () => await planets.find({}, { _id: 0, __v: 0 });
 const savePlanet = async (planet) => {
   try {
     await planets.updateOne(

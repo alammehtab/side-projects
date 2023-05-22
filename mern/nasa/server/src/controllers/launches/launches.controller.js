@@ -3,9 +3,10 @@ const {
   addNewLaunch,
   exitsLaunchWithId,
   abortLaunchById,
-} = require("../../services/launches/launches.service");
+} = require("../../models/launches/launches.model");
 
-const httpGetAllLaunches = (req, res) => res.status(200).json(getAllLaunches());
+const httpGetAllLaunches = async (req, res) =>
+  res.status(200).json(await getAllLaunches());
 
 const httpAddNewLaunch = (req, res) => {
   const launch = req.body;
