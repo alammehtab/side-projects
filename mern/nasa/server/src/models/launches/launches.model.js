@@ -1,6 +1,7 @@
 const launches = require("./launches.mongo");
 const planets = require("../planets/planets.mongo");
-let latestFlightNumber = 100;
+
+const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
   flightNumber: 100,
@@ -24,7 +25,8 @@ const saveLaunch = async (launch) => {
   if (!planet) {
     throw new Error("No matching planet found.");
   }
-  await launches.updateOne(
+  // replaced updateOne with findOneAndUpdate cz it was exposing $setOnInsert in the response
+  await launches.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber,
     },
@@ -33,37 +35,49 @@ const saveLaunch = async (launch) => {
   );
 };
 
-const addNewLaunch = (launch) => {
-  latestFlightNumber++;
-  launches.set(
-    latestFlightNumber,
-    Object.assign(launch, {
-      flightNumber: latestFlightNumber,
-      customers: ["Zero to Mastery", "NASA"],
-      upcoming: true,
-      success: true,
-    })
-  );
+const scheduleNewLaunch = async (launch) => {
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
+  const newLaunch = Object.assign(launch, {
+    success: true,
+    upcoming: true,
+    customers: ["Danish Tailors", "mehtab.io"],
+    flightNumber: newFlightNumber,
+  });
+
+  await saveLaunch(newLaunch);
 };
 
 saveLaunch(launch);
 
-const exitsLaunchWithId = (launchId) => {
-  return launches.has(launchId);
+const existsLaunchWithId = async (launchId) => {
+  return await launches.findOne({
+    flightNumber: launchId,
+  });
 };
 
-const abortLaunchById = (launchId) => {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
+const getLatestFlightNumber = async () => {
+  const latestLaunch = await launches.findOne().sort("-flightNumber");
 
-  return aborted;
+  if (!latestLaunch) {
+    return DEFAULT_FLIGHT_NUMBER;
+  }
+  return latestLaunch.flightNumber;
+};
+
+const abortLaunchById = async (launchId) => {
+  // directly returning the response was giving metadata
+  const aborted = await launches.updateOne(
+    { flightNumber: launchId },
+    { upcoming: false, success: false }
+  );
+
+  return aborted.modifiedCount === 1;
 };
 
 module.exports = {
-  exitsLaunchWithId,
+  existsLaunchWithId,
   getAllLaunches,
   abortLaunchById,
-  addNewLaunch,
+  scheduleNewLaunch,
   saveLaunch,
 };
