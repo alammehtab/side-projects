@@ -18,7 +18,7 @@ app.use(morgan("combined"));
 app.use(express.json());
 //to serve client
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use(planetsRouter);
+app.use("/planets", planetsRouter);
 app.use("/launches", launchesRouter);
 
 // to get pages directly from typing path in the browser, without this typing path directly in
