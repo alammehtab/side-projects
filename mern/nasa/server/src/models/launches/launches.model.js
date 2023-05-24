@@ -1,17 +1,70 @@
 const launches = require("./launches.mongo");
 const planets = require("../planets/planets.mongo");
+const axios = require("axios");
 
 const DEFAULT_FLIGHT_NUMBER = 100;
+const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
-const launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b",
-  customer: ["ZTM", "NASA"],
-  upcoming: true,
-  success: true,
+const populateLaunches = async () => {
+  console.log("Downloading launch data...");
+  const response = await axios.post(SPACEX_API_URL, {
+    query: {},
+    options: {
+      pagination: false,
+      populate: [
+        {
+          path: "rocket",
+          select: {
+            name: 1,
+          },
+        },
+        {
+          path: "payloads",
+          select: {
+            customers: 1,
+          },
+        },
+      ],
+    },
+  });
+
+  if (response.status !== 200) {
+    console.log("Problem downloading launch data");
+    throw new Error("Launch data download failed");
+  }
+
+  const launchDocs = response.data.docs;
+
+  launchDocs.map(async (launchDoc) => {
+    const payloads = launchDoc["payloads"];
+    const customers = payloads.flatMap((payload) => payload["customers"]);
+
+    const launch = {
+      flightNumber: launchDoc["flight_number"],
+      mission: launchDoc["name"],
+      rocket: launchDoc["rocket"]["name"],
+      launchDate: launchDoc["date_local"],
+      upcoming: launchDoc["upcoming"],
+      success: launchDoc["success"],
+      customers: customers,
+    };
+    console.log(`${launch.flightNumber} ${launch.mission}`);
+    await saveLaunch(launch);
+  });
+};
+
+const loadLaunchesData = async () => {
+  const firstLaunch = await findLaunch({
+    flightNumber: 1,
+    rocket: "Falcon 1",
+    mission: "FalconSat",
+  });
+
+  if (firstLaunch) {
+    console.log("launch data already loaded");
+  } else {
+    await populateLaunches();
+  }
 };
 
 const getAllLaunches = async () => {
@@ -19,12 +72,6 @@ const getAllLaunches = async () => {
 };
 
 const saveLaunch = async (launch) => {
-  const planet = await planets.findOne({
-    keplerName: launch.target,
-  });
-  if (!planet) {
-    throw new Error("No matching planet found.");
-  }
   // replaced updateOne with findOneAndUpdate cz it was exposing $setOnInsert in the response
   await launches.findOneAndUpdate(
     {
@@ -36,6 +83,12 @@ const saveLaunch = async (launch) => {
 };
 
 const scheduleNewLaunch = async (launch) => {
+  const planet = await planets.findOne({
+    keplerName: launch.target,
+  });
+  if (!planet) {
+    throw new Error("No matching planet found.");
+  }
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
   const newLaunch = Object.assign(launch, {
     success: true,
@@ -47,10 +100,12 @@ const scheduleNewLaunch = async (launch) => {
   await saveLaunch(newLaunch);
 };
 
-saveLaunch(launch);
+const findLaunch = async (filter) => {
+  return launches.findOne(filter);
+};
 
 const existsLaunchWithId = async (launchId) => {
-  return await launches.findOne({
+  return await findLaunch({
     flightNumber: launchId,
   });
 };
@@ -75,9 +130,9 @@ const abortLaunchById = async (launchId) => {
 };
 
 module.exports = {
+  loadLaunchesData,
   existsLaunchWithId,
   getAllLaunches,
   abortLaunchById,
   scheduleNewLaunch,
-  saveLaunch,
 };
