@@ -3,8 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const planetsRouter = require("./routes/planets/planets.router");
-const launchesRouter = require("./routes/launches/launches.router");
+const api = require("./routes/api");
 
 const app = express();
 
@@ -18,8 +17,8 @@ app.use(morgan("combined"));
 app.use(express.json());
 //to serve client
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use("/planets", planetsRouter);
-app.use("/launches", launchesRouter);
+//our api
+app.use(api);
 
 // to get pages directly from typing path in the browser, without this typing path directly in
 // in browser address bar can't get
