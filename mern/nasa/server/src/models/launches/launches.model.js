@@ -67,8 +67,12 @@ const loadLaunchesData = async () => {
   }
 };
 
-const getAllLaunches = async () => {
-  return await launches.find({}, { _id: 0, __v: 0 });
+const getAllLaunches = async (skip, limit) => {
+  return await launches
+    .find({}, { _id: 0, __v: 0 })
+    .sort({ flightNumber: 1 })
+    .skip(skip)
+    .limit(limit);
 };
 
 const saveLaunch = async (launch) => {
