@@ -3,11 +3,10 @@ import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <header>header</header>
-      <div className={styles.center}>center</div>
-
-      <footer>footer</footer>
-    </main>
+    <div className={styles.container}>
+      <main className={styles.main}>
+        <h1>Coffee Connoisseur</h1>
+      </main>
+    </div>
   );
 }
