@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
+import styles from "./navbar.module.css";
 // data for navbar items
 const links = [
   {
@@ -38,7 +38,7 @@ const links = [
 
 const Navbar = () => {
   return (
-    <div>
+    <div className={styles.container}>
       <Link href="/">DevGenius</Link>
       <div>
         {links.map((link) => (
