@@ -1,2 +1,40 @@
 .container{
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+.item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.title{
+    font-size: 72px;
+    background: linear-gradient(to bottom,#194c33,#bbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heroImg{
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.description{
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.seeOurWorkBtn{
+    padding: 20px;
+    cursor: pointer;
+    background-color: #53c286;
+    border: none;
+    border-radius: 5px;
+    width: max-content;
+    color: white;
 }
