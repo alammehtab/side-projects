@@ -18,7 +18,8 @@ a {
 }
 
 .container {
-  max-width: 1366px;
+  /* max-width: 1366px; */
+  width: 90%;
   min-height: 100vh;
   margin: 0 auto; 
   padding: 0 60px;
