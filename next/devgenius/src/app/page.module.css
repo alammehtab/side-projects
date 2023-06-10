@@ -28,13 +28,3 @@
     font-size: 24px;
     font-weight: 300;
 }
-
-.seeOurWorkBtn{
-    padding: 20px;
-    cursor: pointer;
-    background-color: #53c286;
-    border: none;
-    border-radius: 5px;
-    width: max-content;
-    color: white;
-}

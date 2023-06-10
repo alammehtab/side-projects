@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import HeroImage from "public/hero.png";
+import Button from "./components/button/Button";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
         <p className={styles.description}>
           We turn your ideas into reality with the magic of our awesome team.
         </p>
-        <button className={styles.seeOurWorkBtn}>See Our Work</button>
+        <Button url="/portfolio" text="See Our Work" />
       </div>
       <div className={styles.item}>
         {/* if importing images as components, you don't have to specify width and height,
