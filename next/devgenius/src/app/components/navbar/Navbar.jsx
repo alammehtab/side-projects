@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import styles from "./navbar.module.css";
+import DarkModeToggle from "../dark-mode-toggle/DarkModeToggle";
 // data for navbar items
 const links = [
   {
@@ -43,6 +44,7 @@ const Navbar = () => {
         DevGenius
       </Link>
       <div className={styles.links}>
+        <DarkModeToggle />
         {links.map((link) => (
           <Link key={link.id} href={link.url} className={styles.link}>
             {link.title}
