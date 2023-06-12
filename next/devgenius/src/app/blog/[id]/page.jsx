@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./blogPost.module.css";
+import { notFound } from "next/navigation";
 
 async function getBlogPostData(postId) {
   const res = await fetch(
@@ -10,7 +11,7 @@ async function getBlogPostData(postId) {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data");
+    return notFound();
   }
 
   return res.json();
@@ -25,7 +26,7 @@ async function getUserData(userId) {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data");
+    return notFound();
   }
 
   return res.json();
