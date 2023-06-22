@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./contact.module.css";
-import Button from "../components/button/Button";
+import Button from "../../components/button/Button";
 
 const Contact = () => {
   return (
