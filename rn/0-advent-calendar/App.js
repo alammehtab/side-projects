@@ -1,13 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import DayListItem from "./src/components/DayListItem";
 
 const days = [...Array(24)].map((item, index) => index + 1);
 
-const renderItem = ({ item }) => (
-  <View style={styles.box}>
-    <Text style={styles.text}>{item}</Text>
-  </View>
-);
+const renderItem = ({ item }) => <DayListItem item={item} />;
 
 export default function App() {
   return (
@@ -36,20 +33,5 @@ const styles = StyleSheet.create({
   },
   column: {
     gap: 10,
-  },
-  box: {
-    flex: 1,
-    // if you've width then hight will be calculated to make it a square and vice versa
-    aspectRatio: 1,
-    backgroundColor: "#f9ede3",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#9b4521",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-  },
-  text: {
-    color: "#9b4521",
-    fontSize: 70,
   },
 });
